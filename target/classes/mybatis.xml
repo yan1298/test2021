@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+<!--  settings控制MyBatis全局行为的标签  -->
+    <settings>
+        <!--
+            设置MyBatis的输出日志
+            其中name属性的值代表输入日志
+            value属性的值表示输出到控制台上
+        -->
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+
+<!--
+    environments:环境配置，数据库的连接信息，
+    注意：该标签末尾带s，即可以有多个数据库的连接信息.
+    属性值default：告诉MyBatis使用哪个数据库的连接信息，也就是访问哪个数据库。
+-->
+    <environments default="mydev">
+        <!--
+            environment：一个数据库信息的配置，环境
+            属性id：唯一值，自定义的，表示环境的名称
+        -->
+        <environment id="mydev">
+            <!--
+                  transactionManager：MyBatis的事务处理类型
+                  其属性type：值为JDBC(表示jdbc中的Connection对象的commit、等事务处理)
+            -->
+            <transactionManager type="JDBC"/>
+            <!--
+                   dataSource：数据源，连接数据库的
+                   其属性type：表示数据源的类型，POOLED表示使用连接池
+                   其4个子标签：表示连接数据库信息，name属性值是固定的，不能自定义
+                   分别是驱动名、数据库地址、连接用户名、连接密码
+            -->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/ssm"/>
+                <property name="username" value="root"/>
+                <property name="password" value="123456789"/>
+            </dataSource>
+        </environment>
+
+        <!-- 线上数据库，也就是项目真实使用的数据库 -->
+        <environment id="online">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/ssm"/>
+                <property name="username" value="root"/>
+                <property name="password" value="123456789"/>
+            </dataSource>
+        </environment>
+
+    </environments>
+    <!--
+        指定sql映射文件(sql mapper)的位置
+    -->
+    <mappers>
+        <!--
+            一个mapper标签指定一个文件的位置，从类路径开始的路径信息.
+             类路径：target/clasess
+             注意：若想要dao文件中的该文件和java文件一起被编译到类路径中，需要在pom.xml
+                   文件中配置<resources>插件。
+            如果还有其他的xml配置文件，可以在写一个mapper标签。
+        -->
+        <mapper resource="com/yan/dao/StudentDao.xml"/>
+    </mappers>
+</configuration>
+
+<!--
+    MyBatis的主配置文件：主要定义了数据库的配置信息，sql映射文件的位置
+    1.<!DOCTYPE> 约束文件定义，文件名为：mybatis-3-config.dtd
+    2.configuration根标签：表示各种配置信息.
+-->
